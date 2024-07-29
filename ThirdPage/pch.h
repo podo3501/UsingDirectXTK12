@@ -91,6 +91,7 @@
 #include "SpriteBatch.h"
 #include "SpriteFont.h" 
 #include "VertexTypes.h"
+#include "WICTextureLoader.h"
 
 namespace DX
 {

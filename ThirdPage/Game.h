@@ -61,6 +61,17 @@ private:
     // Rendering loop timer.
     DX::StepTimer                               m_timer;
 
-    // If using the DirectX Tool Kit for DX12, uncomment this line:
-    // std::unique_ptr<DirectX::GraphicsMemory> m_graphicsMemory;
+    std::unique_ptr<DirectX::GraphicsMemory> m_graphicsMemory;
+    std::unique_ptr<DirectX::DescriptorHeap> m_resourceDescriptors;
+    Microsoft::WRL::ComPtr<ID3D12Resource> m_texture;
+
+    std::unique_ptr<DirectX::SpriteBatch> m_spriteBatch;
+    DirectX::SimpleMath::Vector2 m_screenPos;
+    DirectX::SimpleMath::Vector2 m_origin;
+
+    enum Descriptors
+    {
+        Cat,
+        Count
+    };
 };
