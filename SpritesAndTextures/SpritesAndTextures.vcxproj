@@ -19,7 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <RootNamespace>ThirdPage</RootNamespace>
+    <RootNamespace>SpritesAndTextures</RootNamespace>
     <ProjectGuid>{e11c04d4-e195-4682-9757-1ba3e1205a79}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
@@ -220,7 +220,10 @@
     <ResourceCompile Include="resource.rc" />
   </ItemGroup>
   <ItemGroup>
+    <Image Include="cat.dds" />
+    <Image Include="cat.png" />
     <Image Include="directx.ico" />
+    <Image Include="sunset.jpg" />
   </ItemGroup>
   <ItemGroup>
     <Manifest Include="settings.manifest" />
