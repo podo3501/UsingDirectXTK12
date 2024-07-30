@@ -12,6 +12,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "DirectXTK12", "DirectXTK12\
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "DrawingText", "DrawingText\DrawingText.vcxproj", "{D8BFE221-0FC5-4F66-9ECE-0088811632C2}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SimpleRendering", "SimpleRendering\SimpleRendering.vcxproj", "{191734A1-BA90-4084-AD71-0C1AB3A76531}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|ARM64 = Debug|ARM64
@@ -58,6 +60,18 @@ Global
 		{D8BFE221-0FC5-4F66-9ECE-0088811632C2}.Release|x64.Build.0 = Release|x64
 		{D8BFE221-0FC5-4F66-9ECE-0088811632C2}.Release|x86.ActiveCfg = Release|Win32
 		{D8BFE221-0FC5-4F66-9ECE-0088811632C2}.Release|x86.Build.0 = Release|Win32
+		{191734A1-BA90-4084-AD71-0C1AB3A76531}.Debug|ARM64.ActiveCfg = Debug|x64
+		{191734A1-BA90-4084-AD71-0C1AB3A76531}.Debug|ARM64.Build.0 = Debug|x64
+		{191734A1-BA90-4084-AD71-0C1AB3A76531}.Debug|x64.ActiveCfg = Debug|x64
+		{191734A1-BA90-4084-AD71-0C1AB3A76531}.Debug|x64.Build.0 = Debug|x64
+		{191734A1-BA90-4084-AD71-0C1AB3A76531}.Debug|x86.ActiveCfg = Debug|Win32
+		{191734A1-BA90-4084-AD71-0C1AB3A76531}.Debug|x86.Build.0 = Debug|Win32
+		{191734A1-BA90-4084-AD71-0C1AB3A76531}.Release|ARM64.ActiveCfg = Release|x64
+		{191734A1-BA90-4084-AD71-0C1AB3A76531}.Release|ARM64.Build.0 = Release|x64
+		{191734A1-BA90-4084-AD71-0C1AB3A76531}.Release|x64.ActiveCfg = Release|x64
+		{191734A1-BA90-4084-AD71-0C1AB3A76531}.Release|x64.Build.0 = Release|x64
+		{191734A1-BA90-4084-AD71-0C1AB3A76531}.Release|x86.ActiveCfg = Release|Win32
+		{191734A1-BA90-4084-AD71-0C1AB3A76531}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
