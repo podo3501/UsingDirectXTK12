@@ -61,5 +61,19 @@ private:
     DX::StepTimer                               m_timer;
 
     // If using the DirectX Tool Kit for DX12, uncomment this line:
-    // std::unique_ptr<DirectX::GraphicsMemory> m_graphicsMemory;
+    std::unique_ptr<DirectX::GraphicsMemory> m_graphicsMemory;
+
+    DirectX::SimpleMath::Matrix m_world;
+    DirectX::SimpleMath::Matrix m_view;
+    DirectX::SimpleMath::Matrix m_proj;
+
+    std::unique_ptr<DirectX::CommonStates> m_states;
+    std::unique_ptr<DirectX::EffectFactory> m_fxFactory;
+    std::unique_ptr<DirectX::EffectTextureFactory> m_modelResources;
+    std::unique_ptr<DirectX::Model> m_model;
+
+    DirectX::Model::EffectCollection m_modelNormal;
+    DirectX::Model::EffectCollection m_modelWireframe;
+
+    DirectX::Model::EffectCollection m_modelFog;
 };
