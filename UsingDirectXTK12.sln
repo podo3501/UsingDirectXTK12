@@ -20,6 +20,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "3D shapes", "3D shapes\3D s
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Rendering a model", "Rendering a model\Rendering a model.vcxproj", "{2D24AEE9-039D-4C40-99B6-B699AF88A88C}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Animating using model bones", "Animating using model bones\Animating using model bones.vcxproj", "{5621EEFA-2216-4BEA-9342-91A5CFB083D2}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|ARM64 = Debug|ARM64
@@ -114,6 +116,18 @@ Global
 		{2D24AEE9-039D-4C40-99B6-B699AF88A88C}.Release|x64.Build.0 = Release|x64
 		{2D24AEE9-039D-4C40-99B6-B699AF88A88C}.Release|x86.ActiveCfg = Release|Win32
 		{2D24AEE9-039D-4C40-99B6-B699AF88A88C}.Release|x86.Build.0 = Release|Win32
+		{5621EEFA-2216-4BEA-9342-91A5CFB083D2}.Debug|ARM64.ActiveCfg = Debug|x64
+		{5621EEFA-2216-4BEA-9342-91A5CFB083D2}.Debug|ARM64.Build.0 = Debug|x64
+		{5621EEFA-2216-4BEA-9342-91A5CFB083D2}.Debug|x64.ActiveCfg = Debug|x64
+		{5621EEFA-2216-4BEA-9342-91A5CFB083D2}.Debug|x64.Build.0 = Debug|x64
+		{5621EEFA-2216-4BEA-9342-91A5CFB083D2}.Debug|x86.ActiveCfg = Debug|Win32
+		{5621EEFA-2216-4BEA-9342-91A5CFB083D2}.Debug|x86.Build.0 = Debug|Win32
+		{5621EEFA-2216-4BEA-9342-91A5CFB083D2}.Release|ARM64.ActiveCfg = Release|x64
+		{5621EEFA-2216-4BEA-9342-91A5CFB083D2}.Release|ARM64.Build.0 = Release|x64
+		{5621EEFA-2216-4BEA-9342-91A5CFB083D2}.Release|x64.ActiveCfg = Release|x64
+		{5621EEFA-2216-4BEA-9342-91A5CFB083D2}.Release|x64.Build.0 = Release|x64
+		{5621EEFA-2216-4BEA-9342-91A5CFB083D2}.Release|x86.ActiveCfg = Release|Win32
+		{5621EEFA-2216-4BEA-9342-91A5CFB083D2}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
