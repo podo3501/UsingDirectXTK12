@@ -221,6 +221,7 @@
   </ItemGroup>
   <ItemGroup>
     <Image Include="directx.ico" />
+    <Image Include="earth.bmp" />
   </ItemGroup>
   <ItemGroup>
     <Manifest Include="settings.manifest" />
