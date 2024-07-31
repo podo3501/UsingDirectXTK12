@@ -199,6 +199,7 @@
     </FXCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Animation.h" />
     <ClInclude Include="d3dx12.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="pch.h" />
@@ -206,6 +207,7 @@
     <ClInclude Include="DeviceResources.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Animation.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="DeviceResources.cpp" />
@@ -220,7 +222,16 @@
     <ResourceCompile Include="resource.rc" />
   </ItemGroup>
   <ItemGroup>
+    <Image Include="default.dds" />
     <Image Include="directx.ico" />
+    <Image Include="head_diff.dds" />
+    <Image Include="head_norm.dds" />
+    <Image Include="jacket_diff.dds" />
+    <Image Include="jacket_norm.dds" />
+    <Image Include="pants_diff.dds" />
+    <Image Include="pants_norm.dds" />
+    <Image Include="upBody_diff.dds" />
+    <Image Include="upbody_norm.dds" />
   </ItemGroup>
   <ItemGroup>
     <Manifest Include="settings.manifest" />
@@ -229,6 +240,11 @@
     <ProjectReference Include="..\DirectXTK12\DirectXTK_Desktop_2022_Win10.vcxproj">
       <Project>{3e0e8608-cd9b-4c76-af33-29ca38f2c9f0}</Project>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="soldier.sdkmesh" />
+    <None Include="soldier.sdkmesh_anim" />
+    <None Include="teapot.cmo" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

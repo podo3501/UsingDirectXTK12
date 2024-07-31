@@ -21,6 +21,7 @@
     <ClInclude Include="d3dx12.h">
       <Filter>Common</Filter>
     </ClInclude>
+    <ClInclude Include="Animation.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp" />
@@ -29,6 +30,7 @@
     <ClCompile Include="DeviceResources.cpp">
       <Filter>Common</Filter>
     </ClCompile>
+    <ClCompile Include="Animation.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="resource.rc" />
@@ -37,10 +39,48 @@
     <Image Include="directx.ico">
       <Filter>Assets</Filter>
     </Image>
+    <Image Include="default.dds">
+      <Filter>Assets</Filter>
+    </Image>
+    <Image Include="head_diff.dds">
+      <Filter>Assets</Filter>
+    </Image>
+    <Image Include="head_norm.dds">
+      <Filter>Assets</Filter>
+    </Image>
+    <Image Include="jacket_diff.dds">
+      <Filter>Assets</Filter>
+    </Image>
+    <Image Include="jacket_norm.dds">
+      <Filter>Assets</Filter>
+    </Image>
+    <Image Include="pants_diff.dds">
+      <Filter>Assets</Filter>
+    </Image>
+    <Image Include="pants_norm.dds">
+      <Filter>Assets</Filter>
+    </Image>
+    <Image Include="upBody_diff.dds">
+      <Filter>Assets</Filter>
+    </Image>
+    <Image Include="upbody_norm.dds">
+      <Filter>Assets</Filter>
+    </Image>
   </ItemGroup>
   <ItemGroup>
     <Manifest Include="settings.manifest">
       <Filter>Assets</Filter>
     </Manifest>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="teapot.cmo">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="soldier.sdkmesh">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="soldier.sdkmesh_anim">
+      <Filter>Assets</Filter>
+    </None>
   </ItemGroup>
 </Project>

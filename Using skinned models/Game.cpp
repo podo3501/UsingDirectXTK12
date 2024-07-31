@@ -68,8 +68,11 @@ void Game::Update(DX::StepTimer const& timer)
 
     float elapsedTime = float(timer.GetElapsedSeconds());
 
-    // TODO: Add your game logic here.
-    elapsedTime;
+    m_animation.Update(elapsedTime);
+
+    float time = float(timer.GetTotalSeconds());
+
+    m_world = XMMatrixRotationY(time);
 
     PIXEndEvent();
 }
@@ -92,7 +95,16 @@ void Game::Render()
     auto commandList = m_deviceResources->GetCommandList();
     PIXBeginEvent(commandList, PIX_COLOR_DEFAULT, L"Render");
 
-    // TODO: Add your rendering code here.
+    size_t nbones = m_model->bones.size();
+
+    m_animation.Apply(*m_model, nbones, m_drawBones.get());
+
+    ID3D12DescriptorHeap* heaps[] = { m_modelResources->Heap(), m_states->Heap() };
+    commandList->SetDescriptorHeaps(static_cast<UINT>(std::size(heaps)), heaps);
+
+    Model::UpdateEffectMatrices(m_modelNormal, m_world, m_view, m_proj);
+
+    m_model->DrawSkinned(commandList, nbones, m_drawBones.get(), m_world, m_modelNormal.cbegin());
 
     PIXEndEvent(commandList);
 
@@ -101,7 +113,7 @@ void Game::Render()
     m_deviceResources->Present();
 
     // If using the DirectX Tool Kit for DX12, uncomment this line:
-    // m_graphicsMemory->Commit(m_deviceResources->GetCommandQueue());
+    m_graphicsMemory->Commit(m_deviceResources->GetCommandQueue());
 
     PIXEndEvent();
 }
@@ -202,23 +214,92 @@ void Game::CreateDeviceDependentResources()
     }
 
     // If using the DirectX Tool Kit for DX12, uncomment this line:
-    // m_graphicsMemory = std::make_unique<GraphicsMemory>(device);
+    m_graphicsMemory = std::make_unique<GraphicsMemory>(device);
 
-    // TODO: Initialize device dependent objects here (independent of window size).
+    /*m_states = std::make_unique<CommonStates>(device);
+
+    size_t animsOffset;
+    m_model = Model::CreateFromCMO(device, L"teapot.cmo", ModelLoader_IncludeBones, &animsOffset);
+
+    m_model->textureNames.push_back(L"default.dds");
+
+    m_model->materials[0].diffuseTextureIndex = 0;
+    m_model->materials[0].samplerIndex = static_cast<int>(CommonStates::SamplerIndex::AnisotropicClamp);
+
+    DX::ThrowIfFailed(m_animation.Load(L"teapot.cmo", animsOffset));
+
+    m_animation.Bind(*m_model);
+
+    const auto& cull = CommonStates::CullCounterClockwise;
+
+    m_drawBones = ModelBone::MakeArray(m_model->bones.size());*/
+
+    m_states = std::make_unique<CommonStates>(device);
+
+    m_model = Model::CreateFromSDKMESH(device, L"soldier.sdkmesh",
+        ModelLoader_IncludeBones);
+
+    DX::ThrowIfFailed(m_animation.Load(L"soldier.sdkmesh_anim"));
+    
+    m_animation.Bind(*m_model);
+
+    m_drawBones = ModelBone::MakeArray(m_model->bones.size());
+
+    const auto& cull = CommonStates::CullClockwise;
+
+    ResourceUploadBatch resourceUpload(device);
+
+    resourceUpload.Begin();
+
+    m_model->LoadStaticBuffers(device, resourceUpload);
+
+    m_modelResources = m_model->LoadTextures(device, resourceUpload);
+
+    m_fxFactory = std::make_unique<EffectFactory>(m_modelResources->Heap(), m_states->Heap());
+
+    auto uploadResourcesFinished = resourceUpload.End(m_deviceResources->GetCommandQueue());
+
+    uploadResourcesFinished.wait();
+
+    RenderTargetState rtState(m_deviceResources->GetBackBufferFormat(),
+        m_deviceResources->GetDepthBufferFormat());
+
+    EffectPipelineStateDescription pd(
+        nullptr,
+        CommonStates::Opaque,
+        CommonStates::DepthDefault,
+        cull,
+        rtState);
+
+    m_modelNormal = m_model->CreateEffects(*m_fxFactory, pd, pd);
+
+    m_world = Matrix::Identity;
 }
 
 // Allocate all memory resources that change on a window SizeChanged event.
 void Game::CreateWindowSizeDependentResources()
 {
-    // TODO: Initialize windows-size dependent objects here.
+    /*static const XMVECTORF32 c_cameraPos = { 100.f, 100.f, 200.f, 0.f };
+    static const XMVECTORF32 c_lookAt = { 0.f, 25.f, 0.f, 0.f };*/
+
+    static const XMVECTORF32 c_cameraPos = { 0.f, 0.f, 1.5f, 0.f };
+    static const XMVECTORF32 c_lookAt = { 0.f, 0.25f, 0.f, 0.f };
+
+    auto size = m_deviceResources->GetOutputSize();
+    m_view = Matrix::CreateLookAt(c_cameraPos.v, c_lookAt.v, Vector3::UnitY);
+    m_proj = Matrix::CreatePerspectiveFieldOfView(XM_PI / 4.f, float(size.right) / float(size.bottom), 0.1f, 1000.f);
 }
 
 void Game::OnDeviceLost()
 {
-    // TODO: Add Direct3D resource cleanup here.
+    m_states.reset();
+    m_fxFactory.reset();
+    m_modelResources.reset();
+    m_model.reset();
+    m_modelNormal.clear();
 
     // If using the DirectX Tool Kit for DX12, uncomment this line:
-    // m_graphicsMemory.reset();
+    m_graphicsMemory.reset();
 }
 
 void Game::OnDeviceRestored()
