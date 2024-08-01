@@ -30,6 +30,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Multistream rendering and i
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Writing custom shaders", "Writing custom shaders\Writing custom shaders.vcxproj", "{7AD78EE7-2646-411C-BF32-7CD56C044C95}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Authoring an Effect", "Authoring an Effect\Authoring an Effect.vcxproj", "{99AFF9CA-7EFA-44AB-A8D9-A49D140F82F6}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|ARM64 = Debug|ARM64
@@ -184,6 +186,18 @@ Global
 		{7AD78EE7-2646-411C-BF32-7CD56C044C95}.Release|x64.Build.0 = Release|x64
 		{7AD78EE7-2646-411C-BF32-7CD56C044C95}.Release|x86.ActiveCfg = Release|Win32
 		{7AD78EE7-2646-411C-BF32-7CD56C044C95}.Release|x86.Build.0 = Release|Win32
+		{99AFF9CA-7EFA-44AB-A8D9-A49D140F82F6}.Debug|ARM64.ActiveCfg = Debug|x64
+		{99AFF9CA-7EFA-44AB-A8D9-A49D140F82F6}.Debug|ARM64.Build.0 = Debug|x64
+		{99AFF9CA-7EFA-44AB-A8D9-A49D140F82F6}.Debug|x64.ActiveCfg = Debug|x64
+		{99AFF9CA-7EFA-44AB-A8D9-A49D140F82F6}.Debug|x64.Build.0 = Debug|x64
+		{99AFF9CA-7EFA-44AB-A8D9-A49D140F82F6}.Debug|x86.ActiveCfg = Debug|Win32
+		{99AFF9CA-7EFA-44AB-A8D9-A49D140F82F6}.Debug|x86.Build.0 = Debug|Win32
+		{99AFF9CA-7EFA-44AB-A8D9-A49D140F82F6}.Release|ARM64.ActiveCfg = Release|x64
+		{99AFF9CA-7EFA-44AB-A8D9-A49D140F82F6}.Release|ARM64.Build.0 = Release|x64
+		{99AFF9CA-7EFA-44AB-A8D9-A49D140F82F6}.Release|x64.ActiveCfg = Release|x64
+		{99AFF9CA-7EFA-44AB-A8D9-A49D140F82F6}.Release|x64.Build.0 = Release|x64
+		{99AFF9CA-7EFA-44AB-A8D9-A49D140F82F6}.Release|x86.ActiveCfg = Release|Win32
+		{99AFF9CA-7EFA-44AB-A8D9-A49D140F82F6}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
