@@ -62,5 +62,29 @@ private:
     DX::StepTimer                               m_timer;
 
     // If using the DirectX Tool Kit for DX12, uncomment this line:
-    // std::unique_ptr<DirectX::GraphicsMemory> m_graphicsMemory;
+    std::unique_ptr<DirectX::GraphicsMemory> m_graphicsMemory;
+
+    DirectX::SimpleMath::Matrix m_view;
+    DirectX::SimpleMath::Matrix m_proj;
+
+    std::unique_ptr<DirectX::DescriptorHeap> m_resourceDescriptors;
+    std::unique_ptr<DirectX::CommonStates> m_states;
+
+    std::unique_ptr<DirectX::NormalMapEffect> m_effect;
+    std::unique_ptr<DirectX::GeometricPrimitive> m_shape;
+
+    Microsoft::WRL::ComPtr<ID3D12Resource> m_brickDiffuse;
+    Microsoft::WRL::ComPtr<ID3D12Resource> m_brickNormal;
+    Microsoft::WRL::ComPtr<ID3D12Resource> m_brickSpecular;
+
+    UINT m_instanceCount;
+    std::unique_ptr<DirectX::XMFLOAT3X4[]> m_instanceTransforms;
+
+    enum Descriptors
+    {
+        BrickDiffuse,
+        BrickNormal,
+        BrickSpecular,
+        Count
+    };
 };

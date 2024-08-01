@@ -37,6 +37,15 @@
     <Image Include="directx.ico">
       <Filter>Assets</Filter>
     </Image>
+    <Image Include="spnza_bricks_a.DDS">
+      <Filter>Assets</Filter>
+    </Image>
+    <Image Include="spnza_bricks_a_normal.DDS">
+      <Filter>Assets</Filter>
+    </Image>
+    <Image Include="spnza_bricks_a_specular.DDS">
+      <Filter>Assets</Filter>
+    </Image>
   </ItemGroup>
   <ItemGroup>
     <Manifest Include="settings.manifest">

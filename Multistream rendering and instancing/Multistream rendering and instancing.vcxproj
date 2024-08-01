@@ -221,6 +221,9 @@
   </ItemGroup>
   <ItemGroup>
     <Image Include="directx.ico" />
+    <Image Include="spnza_bricks_a.DDS" />
+    <Image Include="spnza_bricks_a_normal.DDS" />
+    <Image Include="spnza_bricks_a_specular.DDS" />
   </ItemGroup>
   <ItemGroup>
     <Manifest Include="settings.manifest" />
