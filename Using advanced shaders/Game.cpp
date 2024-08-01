@@ -67,9 +67,13 @@ void Game::Update(DX::StepTimer const& timer)
     PIXBeginEvent(PIX_COLOR_DEFAULT, L"Update");
 
     float elapsedTime = float(timer.GetElapsedSeconds());
-
-    // TODO: Add your game logic here.
     elapsedTime;
+
+    auto time = static_cast<float>(timer.GetTotalSeconds());
+
+    m_world = Matrix::CreateRotationZ(cosf(time) * 2.f);
+
+    //m_effect->SetFresnelFactor(cosf(time * 2.f));
 
     PIXEndEvent();
 }
@@ -92,7 +96,13 @@ void Game::Render()
     auto commandList = m_deviceResources->GetCommandList();
     PIXBeginEvent(commandList, PIX_COLOR_DEFAULT, L"Render");
 
-    // TODO: Add your rendering code here.
+    ID3D12DescriptorHeap* heaps[] = { m_resourceDescriptors->Heap(), m_states->Heap() };
+    commandList->SetDescriptorHeaps(static_cast<UINT>(std::size(heaps)), heaps);
+
+    m_effect->SetWorld(m_world);
+    m_effect->Apply(commandList);
+
+    m_shape->Draw(commandList);
 
     PIXEndEvent(commandList);
 
@@ -101,7 +111,7 @@ void Game::Render()
     m_deviceResources->Present();
 
     // If using the DirectX Tool Kit for DX12, uncomment this line:
-    // m_graphicsMemory->Commit(m_deviceResources->GetCommandQueue());
+    m_graphicsMemory->Commit(m_deviceResources->GetCommandQueue());
 
     PIXEndEvent();
 }
@@ -202,23 +212,100 @@ void Game::CreateDeviceDependentResources()
     }
 
     // If using the DirectX Tool Kit for DX12, uncomment this line:
-    // m_graphicsMemory = std::make_unique<GraphicsMemory>(device);
+    m_graphicsMemory = std::make_unique<GraphicsMemory>(device);
 
-    // TODO: Initialize device dependent objects here (independent of window size).
+    RenderTargetState rtState(m_deviceResources->GetBackBufferFormat(),
+        m_deviceResources->GetDepthBufferFormat());
+
+    m_resourceDescriptors = std::make_unique<DescriptorHeap>(device,
+        Descriptors::Count);
+
+    ResourceUploadBatch resourceUpload(device);
+
+    resourceUpload.Begin();
+
+    DX::ThrowIfFailed(
+        CreateDDSTextureFromFile(device, resourceUpload, L"wood.dds",
+            m_texture.ReleaseAndGetAddressOf(), false));
+
+    CreateShaderResourceView(device, m_texture.Get(),
+        m_resourceDescriptors->GetCpuHandle(Descriptors::Wood));
+
+    DX::ThrowIfFailed(
+        CreateDDSTextureFromFile(device, resourceUpload, L"normalMap.dds",
+            m_normalTexture.ReleaseAndGetAddressOf(), false));
+
+    CreateShaderResourceView(device, m_normalTexture.Get(),
+        m_resourceDescriptors->GetCpuHandle(Descriptors::NormalMap));
+
+    bool isCubeMap = false;
+    DX::ThrowIfFailed(
+        CreateDDSTextureFromFile(device, resourceUpload, L"cubemap.dds",
+            m_cubemap.ReleaseAndGetAddressOf(), false, 0, nullptr, &isCubeMap));
+
+    CreateShaderResourceView(device, m_cubemap.Get(),
+        m_resourceDescriptors->GetCpuHandle(Descriptors::EnvMap), isCubeMap);
+
+    m_states = std::make_unique<CommonStates>(device);
+
+    EffectPipelineStateDescription pd(
+        &GeometricPrimitive::VertexType::InputLayout,
+        CommonStates::Opaque,
+        CommonStates::DepthDefault,
+        CommonStates::CullNone,
+        rtState);
+
+    /*m_effect = std::make_unique<EnvironmentMapEffect>(device,
+        EffectFlags::Lighting | EffectFlags::Fresnel, pd);*/
+    /*m_effect->SetEnvironmentMap(m_resourceDescriptors->GetGpuHandle(Descriptors::EnvMap),
+        m_states->LinearWrap());*/
+
+    //m_effect = std::make_unique<NormalMapEffect>(device, EffectFlags::None, pd);
+    //m_effect->SetTexture(m_resourceDescriptors->GetGpuHandle(Descriptors::Wood),
+    //m_states->LinearWrap());
+    //m_effect->SetNormalTexture(m_resourceDescriptors->GetGpuHandle(Descriptors::NormalMap));
+
+    //m_effect->EnableDefaultLighting();
+
+    m_effect = std::make_unique<DebugEffect>(device, EffectFlags::None, pd);
+
+    m_effect->SetHemisphericalAmbientColor(Colors::DarkBlue, Colors::Purple);
+
+    m_shape = GeometricPrimitive::CreateTeapot();
+
+    m_world = Matrix::Identity;
+
+    auto uploadResourcesFinished = resourceUpload.End(m_deviceResources->GetCommandQueue());
+
+    uploadResourcesFinished.wait();
 }
 
 // Allocate all memory resources that change on a window SizeChanged event.
 void Game::CreateWindowSizeDependentResources()
 {
-    // TODO: Initialize windows-size dependent objects here.
+    auto size = m_deviceResources->GetOutputSize();
+
+    m_view = Matrix::CreateLookAt(Vector3(2.f, 2.f, 2.f),
+        Vector3::Zero, Vector3::UnitY);
+    m_proj = Matrix::CreatePerspectiveFieldOfView(XM_PI / 4.f,
+        float(size.right) / float(size.bottom), 0.1f, 10.f);
+
+    m_effect->SetView(m_view);
+    m_effect->SetProjection(m_proj);
 }
 
 void Game::OnDeviceLost()
 {
-    // TODO: Add Direct3D resource cleanup here.
+    m_states.reset();
+    m_shape.reset();
+    m_effect.reset();
+    m_texture.Reset();
+    m_cubemap.Reset();
+    m_resourceDescriptors.reset();
+    m_normalTexture.Reset();
 
     // If using the DirectX Tool Kit for DX12, uncomment this line:
-    // m_graphicsMemory.reset();
+    m_graphicsMemory.reset();
 }
 
 void Game::OnDeviceRestored()

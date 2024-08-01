@@ -62,5 +62,28 @@ private:
     DX::StepTimer                               m_timer;
 
     // If using the DirectX Tool Kit for DX12, uncomment this line:
-    // std::unique_ptr<DirectX::GraphicsMemory> m_graphicsMemory;
+    std::unique_ptr<DirectX::GraphicsMemory> m_graphicsMemory;
+
+    DirectX::SimpleMath::Matrix m_world;
+    DirectX::SimpleMath::Matrix m_view;
+    DirectX::SimpleMath::Matrix m_proj;
+
+    std::unique_ptr<DirectX::CommonStates> m_states;
+    std::unique_ptr<DirectX::GeometricPrimitive> m_shape;
+    //std::unique_ptr<DirectX::EnvironmentMapEffect> m_effect;
+    //std::unique_ptr<DirectX::NormalMapEffect> m_effect;
+    std::unique_ptr<DirectX::DebugEffect> m_effect;
+    std::unique_ptr<DirectX::DescriptorHeap> m_resourceDescriptors;
+
+    Microsoft::WRL::ComPtr<ID3D12Resource> m_texture;
+    Microsoft::WRL::ComPtr<ID3D12Resource> m_cubemap;
+    Microsoft::WRL::ComPtr<ID3D12Resource> m_normalTexture;
+
+    enum Descriptors
+    {
+        Wood,
+        EnvMap,
+        NormalMap,
+        Count
+    };
 };
