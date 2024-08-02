@@ -14,12 +14,20 @@ using Microsoft::WRL::ComPtr;
 
 Game::Game() noexcept(false)
 {
-    m_deviceResources = std::make_unique<DX::DeviceResources>();
+    //m_deviceResources = std::make_unique<DX::DeviceResources>(DXGI_FORMAT_R10G10B10A2_UNORM);
+    m_deviceResources = std::make_unique<DX::DeviceResources>(DXGI_FORMAT_R10G10B10A2_UNORM,
+        DXGI_FORMAT_D32_FLOAT, 2, D3D_FEATURE_LEVEL_11_0, DX::DeviceResources::c_EnableHDR);
     // TODO: Provide parameters for swapchain format, depth/stencil format, and backbuffer count.
     //   Add DX::DeviceResources::c_AllowTearing to opt-in to variable rate displays.
     //   Add DX::DeviceResources::c_EnableHDR for HDR10 display.
     //   Add DX::DeviceResources::c_ReverseDepth to optimize depth buffer clears for 0 instead of 1.
     m_deviceResources->RegisterDeviceNotify(this);
+
+    m_hdrScene = std::make_unique<DX::RenderTexture>(DXGI_FORMAT_R16G16B16A16_FLOAT);
+
+    XMVECTORF32 color;
+    color.v = XMColorSRGBToRGB(Colors::CornflowerBlue);
+    m_hdrScene->SetClearColor(color);
 }
 
 Game::~Game()
@@ -66,10 +74,12 @@ void Game::Update(DX::StepTimer const& timer)
 {
     PIXBeginEvent(PIX_COLOR_DEFAULT, L"Update");
 
-    float elapsedTime = float(timer.GetElapsedSeconds());
+    auto time = static_cast<float>(timer.GetTotalSeconds());
 
-    // TODO: Add your game logic here.
-    elapsedTime;
+    m_world = Matrix::CreateRotationZ(cosf(time) * 2.f);
+
+    float colorScale = 1.f + cosf(time);
+    m_effect->SetDiffuseColor(XMVectorSetW(Colors::White * colorScale, 1.f));
 
     PIXEndEvent();
 }
@@ -87,23 +97,50 @@ void Game::Render()
 
     // Prepare the command list to render a new frame.
     m_deviceResources->Prepare();
-    Clear();
 
     auto commandList = m_deviceResources->GetCommandList();
-    PIXBeginEvent(commandList, PIX_COLOR_DEFAULT, L"Render");
+    m_hdrScene->BeginScene(commandList);
 
-    // TODO: Add your rendering code here.
+    Clear();
 
-    PIXEndEvent(commandList);
+    m_effect->SetMatrices(m_world, m_view, m_proj);
+    m_effect->Apply(commandList);
+    m_shape->Draw(commandList);
+
+    m_hdrScene->EndScene(commandList);
+
+    auto rtvDescriptor = m_deviceResources->GetRenderTargetView();
+    commandList->OMSetRenderTargets(1, &rtvDescriptor, FALSE, nullptr);
+
+    ID3D12DescriptorHeap* heaps[] = { m_resourceDescriptors->Heap() };
+    commandList->SetDescriptorHeaps(static_cast<UINT>(std::size(heaps)), heaps);
+
+    switch (m_deviceResources->GetColorSpace())
+    {
+    default:
+        m_toneMap->Process(commandList);
+        break;
+
+    case DXGI_COLOR_SPACE_RGB_FULL_G2084_NONE_P2020:
+        m_toneMapHDR10->Process(commandList);
+        break;
+
+    case DXGI_COLOR_SPACE_RGB_FULL_G10_NONE_P709:
+        // Required if R16G16B16A16_FLOAT is used as display format
+        // (otherwise you can omit this case)
+        m_toneMapLinear->Process(commandList);
+        break;
+    }
+
+    m_toneMap->Process(commandList);
+
+    PIXBeginEvent(PIX_COLOR_DEFAULT, L"Present");
 
     // Show the new frame.
-    PIXBeginEvent(PIX_COLOR_DEFAULT, L"Present");
     m_deviceResources->Present();
+    m_graphicsMemory->Commit(m_deviceResources->GetCommandQueue());
 
-    // If using the DirectX Tool Kit for DX12, uncomment this line:
-    // m_graphicsMemory->Commit(m_deviceResources->GetCommandQueue());
-
-    PIXEndEvent();
+    PIXEndEvent();   
 }
 
 // Helper method to clear the back buffers.
@@ -113,11 +150,12 @@ void Game::Clear()
     PIXBeginEvent(commandList, PIX_COLOR_DEFAULT, L"Clear");
 
     // Clear the views.
-    auto const rtvDescriptor = m_deviceResources->GetRenderTargetView();
+    auto const rtvDescriptor = m_renderDescriptors->GetCpuHandle(RTDescriptors::HDRScene);
     auto const dsvDescriptor = m_deviceResources->GetDepthStencilView();
 
     commandList->OMSetRenderTargets(1, &rtvDescriptor, FALSE, &dsvDescriptor);
-    commandList->ClearRenderTargetView(rtvDescriptor, Colors::CornflowerBlue, 0, nullptr);
+    //commandList->ClearRenderTargetView(rtvDescriptor, Colors::CornflowerBlue, 0, nullptr);
+    m_hdrScene->Clear(commandList);
     commandList->ClearDepthStencilView(dsvDescriptor, D3D12_CLEAR_FLAG_DEPTH, 1.0f, 0, 0, nullptr);
 
     // Set the viewport and scissor rect.
@@ -202,23 +240,86 @@ void Game::CreateDeviceDependentResources()
     }
 
     // If using the DirectX Tool Kit for DX12, uncomment this line:
-    // m_graphicsMemory = std::make_unique<GraphicsMemory>(device);
+    m_graphicsMemory = std::make_unique<GraphicsMemory>(device);
 
-    // TODO: Initialize device dependent objects here (independent of window size).
+    RenderTargetState hdrState(m_hdrScene->GetFormat(),
+        m_deviceResources->GetDepthBufferFormat());
+
+    EffectPipelineStateDescription pd(
+        &GeometricPrimitive::VertexType::InputLayout,
+        CommonStates::Opaque,
+        CommonStates::DepthDefault,
+        CommonStates::CullNone,
+        hdrState);
+
+    m_effect = std::make_unique<BasicEffect>(device, EffectFlags::Lighting, pd);
+    m_effect->EnableDefaultLighting();
+
+    m_shape = GeometricPrimitive::CreateTeapot();
+
+    m_world = Matrix::Identity;
+
+    m_resourceDescriptors = std::make_unique<DescriptorHeap>(device, Descriptors::Count);
+
+    m_renderDescriptors = std::make_unique<DescriptorHeap>(device,
+        D3D12_DESCRIPTOR_HEAP_TYPE_RTV,
+        D3D12_DESCRIPTOR_HEAP_FLAG_NONE,
+        RTDescriptors::RTCount);
+
+    m_hdrScene->SetDevice(device,
+        m_resourceDescriptors->GetCpuHandle(Descriptors::SceneTex),
+        m_renderDescriptors->GetCpuHandle(RTDescriptors::HDRScene));
+
+    RenderTargetState rtState(m_deviceResources->GetBackBufferFormat(),
+        DXGI_FORMAT_UNKNOWN);
+
+    m_toneMap = std::make_unique<ToneMapPostProcess>(device,
+        rtState,
+        ToneMapPostProcess::ACESFilmic,
+        (m_deviceResources->GetBackBufferFormat() == DXGI_FORMAT_R16G16B16A16_FLOAT)
+        ? ToneMapPostProcess::Linear : ToneMapPostProcess::SRGB);
+
+    m_toneMapHDR10 = std::make_unique<ToneMapPostProcess>(device,
+        rtState,
+        ToneMapPostProcess::None, ToneMapPostProcess::ST2084);
+
+    m_toneMapLinear = std::make_unique<ToneMapPostProcess>(device,
+        rtState,
+        ToneMapPostProcess::None, ToneMapPostProcess::Linear);
 }
 
 // Allocate all memory resources that change on a window SizeChanged event.
 void Game::CreateWindowSizeDependentResources()
 {
-    // TODO: Initialize windows-size dependent objects here.
+    auto size = m_deviceResources->GetOutputSize();
+    m_hdrScene->SetWindow(size);
+
+    auto sceneTex = m_resourceDescriptors->GetGpuHandle(Descriptors::SceneTex);
+    m_toneMap->SetHDRSourceTexture(sceneTex);
+    m_toneMapHDR10->SetHDRSourceTexture(sceneTex);
+    m_toneMapLinear->SetHDRSourceTexture(sceneTex);
+
+    m_view = Matrix::CreateLookAt(Vector3(2.f, 2.f, 2.f),
+        Vector3::Zero, Vector3::UnitY);
+    m_proj = Matrix::CreatePerspectiveFieldOfView(XM_PI / 4.f,
+        float(size.right) / float(size.bottom), 0.1f, 10.f);
 }
 
 void Game::OnDeviceLost()
 {
-    // TODO: Add Direct3D resource cleanup here.
+    m_hdrScene->ReleaseDevice();
+    m_toneMap.reset();
+    m_resourceDescriptors.reset();
+    m_renderDescriptors.reset();
+
+    m_shape.reset();
+    m_effect.reset();
+
+    m_toneMapHDR10.reset();
+    m_toneMapLinear.reset();
 
     // If using the DirectX Tool Kit for DX12, uncomment this line:
-    // m_graphicsMemory.reset();
+    m_graphicsMemory.reset();
 }
 
 void Game::OnDeviceRestored()

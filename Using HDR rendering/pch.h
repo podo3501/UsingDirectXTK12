@@ -90,6 +90,7 @@
 #include "../DirectXTK12/Inc/SimpleMath.h"
 #include "../DirectXTK12/Inc/SpriteBatch.h"
 #include "../DirectXTK12/Inc/SpriteFont.h" 
+#include "../DirectXTK12/Inc/PostProcess.h"
 #include "../DirectXTK12/Inc/VertexTypes.h"
 #include "../DirectXTK12/Inc/WICTextureLoader.h"
 
