@@ -34,6 +34,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Authoring an Effect", "Auth
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Using HDR rendering", "Using HDR rendering\Using HDR rendering.vcxproj", "{286A8F74-C6F6-4885-8781-D77599B996E9}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Physically based rendering", "Physically based rendering\Physically based rendering.vcxproj", "{4097C1D3-CAF1-406B-8ABA-A5EB644CEF63}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|ARM64 = Debug|ARM64
@@ -212,6 +214,18 @@ Global
 		{286A8F74-C6F6-4885-8781-D77599B996E9}.Release|x64.Build.0 = Release|x64
 		{286A8F74-C6F6-4885-8781-D77599B996E9}.Release|x86.ActiveCfg = Release|Win32
 		{286A8F74-C6F6-4885-8781-D77599B996E9}.Release|x86.Build.0 = Release|Win32
+		{4097C1D3-CAF1-406B-8ABA-A5EB644CEF63}.Debug|ARM64.ActiveCfg = Debug|x64
+		{4097C1D3-CAF1-406B-8ABA-A5EB644CEF63}.Debug|ARM64.Build.0 = Debug|x64
+		{4097C1D3-CAF1-406B-8ABA-A5EB644CEF63}.Debug|x64.ActiveCfg = Debug|x64
+		{4097C1D3-CAF1-406B-8ABA-A5EB644CEF63}.Debug|x64.Build.0 = Debug|x64
+		{4097C1D3-CAF1-406B-8ABA-A5EB644CEF63}.Debug|x86.ActiveCfg = Debug|Win32
+		{4097C1D3-CAF1-406B-8ABA-A5EB644CEF63}.Debug|x86.Build.0 = Debug|Win32
+		{4097C1D3-CAF1-406B-8ABA-A5EB644CEF63}.Release|ARM64.ActiveCfg = Release|x64
+		{4097C1D3-CAF1-406B-8ABA-A5EB644CEF63}.Release|ARM64.Build.0 = Release|x64
+		{4097C1D3-CAF1-406B-8ABA-A5EB644CEF63}.Release|x64.ActiveCfg = Release|x64
+		{4097C1D3-CAF1-406B-8ABA-A5EB644CEF63}.Release|x64.Build.0 = Release|x64
+		{4097C1D3-CAF1-406B-8ABA-A5EB644CEF63}.Release|x86.ActiveCfg = Release|Win32
+		{4097C1D3-CAF1-406B-8ABA-A5EB644CEF63}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
