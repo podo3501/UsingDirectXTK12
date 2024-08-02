@@ -32,6 +32,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Writing custom shaders", "W
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Authoring an Effect", "Authoring an Effect\Authoring an Effect.vcxproj", "{99AFF9CA-7EFA-44AB-A8D9-A49D140F82F6}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Using HDR rendering", "Using HDR rendering\Using HDR rendering.vcxproj", "{286A8F74-C6F6-4885-8781-D77599B996E9}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|ARM64 = Debug|ARM64
@@ -198,6 +200,18 @@ Global
 		{99AFF9CA-7EFA-44AB-A8D9-A49D140F82F6}.Release|x64.Build.0 = Release|x64
 		{99AFF9CA-7EFA-44AB-A8D9-A49D140F82F6}.Release|x86.ActiveCfg = Release|Win32
 		{99AFF9CA-7EFA-44AB-A8D9-A49D140F82F6}.Release|x86.Build.0 = Release|Win32
+		{286A8F74-C6F6-4885-8781-D77599B996E9}.Debug|ARM64.ActiveCfg = Debug|x64
+		{286A8F74-C6F6-4885-8781-D77599B996E9}.Debug|ARM64.Build.0 = Debug|x64
+		{286A8F74-C6F6-4885-8781-D77599B996E9}.Debug|x64.ActiveCfg = Debug|x64
+		{286A8F74-C6F6-4885-8781-D77599B996E9}.Debug|x64.Build.0 = Debug|x64
+		{286A8F74-C6F6-4885-8781-D77599B996E9}.Debug|x86.ActiveCfg = Debug|Win32
+		{286A8F74-C6F6-4885-8781-D77599B996E9}.Debug|x86.Build.0 = Debug|Win32
+		{286A8F74-C6F6-4885-8781-D77599B996E9}.Release|ARM64.ActiveCfg = Release|x64
+		{286A8F74-C6F6-4885-8781-D77599B996E9}.Release|ARM64.Build.0 = Release|x64
+		{286A8F74-C6F6-4885-8781-D77599B996E9}.Release|x64.ActiveCfg = Release|x64
+		{286A8F74-C6F6-4885-8781-D77599B996E9}.Release|x64.Build.0 = Release|x64
+		{286A8F74-C6F6-4885-8781-D77599B996E9}.Release|x86.ActiveCfg = Release|Win32
+		{286A8F74-C6F6-4885-8781-D77599B996E9}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
