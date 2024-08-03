@@ -36,6 +36,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Using HDR rendering", "Usin
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Physically based rendering", "Physically based rendering\Physically based rendering.vcxproj", "{4097C1D3-CAF1-406B-8ABA-A5EB644CEF63}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Adding audio to your project", "Adding audio to your project\Adding audio to your project.vcxproj", "{40769199-73F2-492B-9238-E777FBD8CD85}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|ARM64 = Debug|ARM64
@@ -226,6 +228,18 @@ Global
 		{4097C1D3-CAF1-406B-8ABA-A5EB644CEF63}.Release|x64.Build.0 = Release|x64
 		{4097C1D3-CAF1-406B-8ABA-A5EB644CEF63}.Release|x86.ActiveCfg = Release|Win32
 		{4097C1D3-CAF1-406B-8ABA-A5EB644CEF63}.Release|x86.Build.0 = Release|Win32
+		{40769199-73F2-492B-9238-E777FBD8CD85}.Debug|ARM64.ActiveCfg = Debug|x64
+		{40769199-73F2-492B-9238-E777FBD8CD85}.Debug|ARM64.Build.0 = Debug|x64
+		{40769199-73F2-492B-9238-E777FBD8CD85}.Debug|x64.ActiveCfg = Debug|x64
+		{40769199-73F2-492B-9238-E777FBD8CD85}.Debug|x64.Build.0 = Debug|x64
+		{40769199-73F2-492B-9238-E777FBD8CD85}.Debug|x86.ActiveCfg = Debug|Win32
+		{40769199-73F2-492B-9238-E777FBD8CD85}.Debug|x86.Build.0 = Debug|Win32
+		{40769199-73F2-492B-9238-E777FBD8CD85}.Release|ARM64.ActiveCfg = Release|x64
+		{40769199-73F2-492B-9238-E777FBD8CD85}.Release|ARM64.Build.0 = Release|x64
+		{40769199-73F2-492B-9238-E777FBD8CD85}.Release|x64.ActiveCfg = Release|x64
+		{40769199-73F2-492B-9238-E777FBD8CD85}.Release|x64.Build.0 = Release|x64
+		{40769199-73F2-492B-9238-E777FBD8CD85}.Release|x86.ActiveCfg = Release|Win32
+		{40769199-73F2-492B-9238-E777FBD8CD85}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
