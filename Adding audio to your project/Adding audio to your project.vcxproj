@@ -230,6 +230,13 @@
       <Project>{3e0e8608-cd9b-4c76-af33-29ca38f2c9f0}</Project>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup>
+    <Media Include="media_Explo1.wav" />
+    <Media Include="media_Explo2.wav" />
+    <Media Include="media_Explo3.wav" />
+    <Media Include="media_Explo4.wav" />
+    <Media Include="media_NightAmbienceSimple_02.wav" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

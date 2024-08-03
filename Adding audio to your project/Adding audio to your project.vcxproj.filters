@@ -43,4 +43,21 @@
       <Filter>Assets</Filter>
     </Manifest>
   </ItemGroup>
+  <ItemGroup>
+    <Media Include="media_Explo1.wav">
+      <Filter>Assets</Filter>
+    </Media>
+    <Media Include="media_Explo2.wav">
+      <Filter>Assets</Filter>
+    </Media>
+    <Media Include="media_Explo3.wav">
+      <Filter>Assets</Filter>
+    </Media>
+    <Media Include="media_Explo4.wav">
+      <Filter>Assets</Filter>
+    </Media>
+    <Media Include="media_NightAmbienceSimple_02.wav">
+      <Filter>Assets</Filter>
+    </Media>
+  </ItemGroup>
 </Project>
