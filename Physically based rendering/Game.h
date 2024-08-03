@@ -6,7 +6,7 @@
 
 #include "DeviceResources.h"
 #include "StepTimer.h"
-
+#include "RenderTexture.h"
 
 // A basic game implementation that creates a D3D12 device and
 // provides a game loop.
@@ -62,5 +62,45 @@ private:
     DX::StepTimer                               m_timer;
 
     // If using the DirectX Tool Kit for DX12, uncomment this line:
-    // std::unique_ptr<DirectX::GraphicsMemory> m_graphicsMemory;
+    std::unique_ptr<DirectX::GraphicsMemory> m_graphicsMemory;
+
+    DirectX::SimpleMath::Matrix m_world;
+    DirectX::SimpleMath::Matrix m_view;
+    DirectX::SimpleMath::Matrix m_proj;
+
+    std::unique_ptr<DirectX::CommonStates> m_states;
+    std::unique_ptr<DirectX::GeometricPrimitive> m_shape;
+    std::unique_ptr<DirectX::PBREffect> m_effect;
+
+    Microsoft::WRL::ComPtr<ID3D12Resource> m_radiance;
+    Microsoft::WRL::ComPtr<ID3D12Resource> m_irradiance;
+
+    std::unique_ptr<DX::RenderTexture> m_hdrScene;
+    std::unique_ptr<DirectX::ToneMapPostProcess> m_toneMap;
+
+    std::unique_ptr<DirectX::DescriptorHeap> m_resourceDescriptors;
+    std::unique_ptr<DirectX::DescriptorHeap> m_renderDescriptors;
+
+    enum Descriptors
+    {
+        SceneTex,
+        RadianceIBL,
+        IrradianceIBL,
+        AlbedoMap,
+        NormalMap,
+        RMAMap,
+        EmissiveMap,
+        Count
+    };
+
+    enum RTDescriptors
+    {
+        HDRScene,
+        RTCount
+    };
+
+    Microsoft::WRL::ComPtr<ID3D12Resource> m_albedoMap;
+    Microsoft::WRL::ComPtr<ID3D12Resource> m_normalMap;
+    Microsoft::WRL::ComPtr<ID3D12Resource> m_rmaMap;
+    Microsoft::WRL::ComPtr<ID3D12Resource> m_emissiveMap;
 };

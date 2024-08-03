@@ -202,6 +202,7 @@
     <ClInclude Include="d3dx12.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="pch.h" />
+    <ClInclude Include="RenderTexture.h" />
     <ClInclude Include="StepTimer.h" />
     <ClInclude Include="DeviceResources.h" />
   </ItemGroup>
@@ -215,12 +216,19 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="RenderTexture.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="resource.rc" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="directx.ico" />
+    <Image Include="Sphere2Mat_baseColor.png" />
+    <Image Include="Sphere2Mat_emissive.png" />
+    <Image Include="Sphere2Mat_normal.png" />
+    <Image Include="Sphere2Mat_occlusionRoughnessMetallic.png" />
+    <Image Include="SunSubMixer_diffuseIBL.dds" />
+    <Image Include="SunSubMixer_specularIBL.dds" />
   </ItemGroup>
   <ItemGroup>
     <Manifest Include="settings.manifest" />
