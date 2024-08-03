@@ -8,11 +8,29 @@
 extern void ExitGame() noexcept;
 
 using namespace DirectX;
+using namespace DirectX::SimpleMath;
 
 using Microsoft::WRL::ComPtr;
 
+namespace
+{
+    constexpr X3DAUDIO_CONE c_listenerCone = {
+        X3DAUDIO_PI * 5.0f / 6.0f, X3DAUDIO_PI * 11.0f / 6.0f, 1.0f, 0.75f, 0.0f, 0.25f, 0.708f, 1.0f };
+    constexpr X3DAUDIO_CONE c_emitterCone = {
+        0.f, 0.f, 0.f, 1.f, 0.f, 1.f, 0.f, 1.f };
+    constexpr X3DAUDIO_DISTANCE_CURVE_POINT c_emitter_LFE_CurvePoints[3] = {
+        { 0.0f, 1.0f }, { 0.25f, 0.0f }, { 1.0f, 0.0f } };
+    constexpr X3DAUDIO_DISTANCE_CURVE c_emitter_LFE_Curve = {
+        const_cast<X3DAUDIO_DISTANCE_CURVE_POINT*>(&c_emitter_LFE_CurvePoints[0]), 3 };
+    constexpr X3DAUDIO_DISTANCE_CURVE_POINT c_emitter_Reverb_CurvePoints[3] = {
+        { 0.0f, 0.5f}, { 0.75f, 1.0f }, { 1.0f, 0.0f } };
+    constexpr X3DAUDIO_DISTANCE_CURVE c_emitter_Reverb_Curve = {
+        const_cast<X3DAUDIO_DISTANCE_CURVE_POINT*>(&c_emitter_Reverb_CurvePoints[0]), 3 };
+}
+
 Game::Game() noexcept(false) :
-    m_retryAudio(false)
+    m_retryAudio(false),
+    m_position(0, 0, -10.f)
 {
     m_deviceResources = std::make_unique<DX::DeviceResources>();
     // TODO: Provide parameters for swapchain format, depth/stencil format, and backbuffer count.
@@ -33,6 +51,8 @@ Game::~Game()
     {
         m_audEngine->Suspend();
     }
+
+    m_soundSource.reset();
 }
 
 // Initialize the Direct3D resources required to run.
@@ -53,11 +73,24 @@ void Game::Initialize(HWND window, int width, int height)
     m_timer.SetTargetElapsedSeconds(1.0 / 60);
     */
 
-    AUDIO_ENGINE_FLAGS eflags = AudioEngine_Default;
+    AUDIO_ENGINE_FLAGS eflags = AudioEngine_EnvironmentalReverb | AudioEngine_ReverbUseFilters;
 #ifdef _DEBUG
     eflags |= AudioEngine_Debug;
 #endif
     m_audEngine = std::make_unique<AudioEngine>(eflags);
+    m_soundEffect = std::make_unique<SoundEffect>(m_audEngine.get(), L"heli.wav");
+
+    m_audEngine->SetReverb(Reverb_Hangar);
+
+    m_soundSource = m_soundEffect->CreateInstance(SoundEffectInstance_Use3D | SoundEffectInstance_ReverbUseFilters);
+    m_soundSource->Play(true);
+
+    m_listener.pCone = const_cast<X3DAUDIO_CONE*>(&c_listenerCone);
+
+    m_emitter.pLFECurve = const_cast<X3DAUDIO_DISTANCE_CURVE*>(&c_emitter_LFE_Curve);
+    m_emitter.pReverbCurve = const_cast<X3DAUDIO_DISTANCE_CURVE*>(&c_emitter_Reverb_Curve);
+    m_emitter.CurveDistanceScaler = 14.f;
+    m_emitter.pCone = const_cast<X3DAUDIO_CONE*>(&c_emitterCone);
 }
 
 #pragma region Frame Update
@@ -87,7 +120,9 @@ void Game::Update(DX::StepTimer const& timer)
         m_retryAudio = false;
         if (m_audEngine->Reset())
         {
-            // TODO: restart any looped sounds here
+
+            if (m_soundSource)
+                m_soundSource->Play(true);
         }
     }
     else if (!m_audEngine->Update())
@@ -97,6 +132,18 @@ void Game::Update(DX::StepTimer const& timer)
             m_retryAudio = true;
         }
     }
+
+    // Move the object around in a circle.
+    double speed = timer.GetTotalSeconds() / 2;
+    m_position = Vector3(
+        static_cast<float>(cos(speed)) * 5.f,
+        0,
+        static_cast<float>(sin(speed))) * -5.f;
+
+    m_emitter.Update(m_position, Vector3::Up, static_cast<float>(timer.GetElapsedSeconds()));
+
+    if (m_soundSource)
+        m_soundSource->Apply3D(m_listener, m_emitter);
 
     PIXEndEvent();
 }
@@ -119,7 +166,11 @@ void Game::Render()
     auto commandList = m_deviceResources->GetCommandList();
     PIXBeginEvent(commandList, PIX_COLOR_DEFAULT, L"Render");
 
-    // TODO: Add your rendering code here.
+    XMMATRIX world = XMMatrixTranslation(m_position.x, m_position.y, m_position.z);
+    m_ballEffect->SetMatrices(world, m_view, m_proj);
+    m_ballEffect->SetDiffuseColor(Colors::Yellow);
+    m_ballEffect->Apply(commandList);
+    m_ball->Draw(commandList);
 
     PIXEndEvent(commandList);
 
@@ -128,7 +179,7 @@ void Game::Render()
     m_deviceResources->Present();
 
     // If using the DirectX Tool Kit for DX12, uncomment this line:
-    // m_graphicsMemory->Commit(m_deviceResources->GetCommandQueue());
+    m_graphicsMemory->Commit(m_deviceResources->GetCommandQueue());
 
     PIXEndEvent();
 }
@@ -229,23 +280,44 @@ void Game::CreateDeviceDependentResources()
     }
 
     // If using the DirectX Tool Kit for DX12, uncomment this line:
-    // m_graphicsMemory = std::make_unique<GraphicsMemory>(device);
+    m_graphicsMemory = std::make_unique<GraphicsMemory>(device);
 
-    // TODO: Initialize device dependent objects here (independent of window size).
+    m_ball = GeometricPrimitive::CreateSphere();
+
+    RenderTargetState rtState(m_deviceResources->GetBackBufferFormat(),
+        m_deviceResources->GetDepthBufferFormat());
+
+    {
+        EffectPipelineStateDescription pd(
+            &GeometricPrimitive::VertexType::InputLayout,
+            CommonStates::Opaque,
+            CommonStates::DepthDefault,
+            CommonStates::CullNone,
+            rtState);
+
+        m_ballEffect = std::make_unique<BasicEffect>(device, EffectFlags::Lighting, pd);
+        m_ballEffect->EnableDefaultLighting();
+    }
 }
 
 // Allocate all memory resources that change on a window SizeChanged event.
 void Game::CreateWindowSizeDependentResources()
 {
-    // TODO: Initialize windows-size dependent objects here.
+    auto size = m_deviceResources->GetOutputSize();
+    m_proj = Matrix::CreatePerspectiveFieldOfView(XM_PI / 4.f,
+        float(size.right) / float(size.bottom), 0.1f, 20.f);
+
+    m_view = Matrix::CreateLookAt(Vector3::Zero,
+        Vector3::Forward, Vector3::Up);
 }
 
 void Game::OnDeviceLost()
 {
-    // TODO: Add Direct3D resource cleanup here.
+    m_ball.reset();
+    m_ballEffect.reset();
 
     // If using the DirectX Tool Kit for DX12, uncomment this line:
-    // m_graphicsMemory.reset();
+    m_graphicsMemory.reset();
 }
 
 void Game::OnDeviceRestored()

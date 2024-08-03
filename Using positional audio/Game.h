@@ -63,8 +63,22 @@ private:
     DX::StepTimer                               m_timer;
 
     // If using the DirectX Tool Kit for DX12, uncomment this line:
-    // std::unique_ptr<DirectX::GraphicsMemory> m_graphicsMemory;
+    std::unique_ptr<DirectX::GraphicsMemory> m_graphicsMemory;
 
     std::unique_ptr<DirectX::AudioEngine> m_audEngine;
     bool m_retryAudio;
+
+    std::unique_ptr<DirectX::SoundEffect> m_soundEffect;
+    std::unique_ptr<DirectX::SoundEffectInstance> m_soundSource;
+
+    std::unique_ptr<DirectX::GeometricPrimitive> m_ball;
+
+    DirectX::SimpleMath::Matrix m_proj;
+    DirectX::SimpleMath::Matrix m_view;
+    DirectX::SimpleMath::Vector3 m_position;
+
+    std::unique_ptr<DirectX::BasicEffect> m_ballEffect;
+
+    DirectX::AudioListener m_listener;
+    DirectX::AudioEmitter m_emitter;
 };
