@@ -43,4 +43,12 @@
       <Filter>Assets</Filter>
     </Manifest>
   </ItemGroup>
+  <ItemGroup>
+    <None Include="sounds.xwb">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="music.xwb">
+      <Filter>Assets</Filter>
+    </None>
+  </ItemGroup>
 </Project>

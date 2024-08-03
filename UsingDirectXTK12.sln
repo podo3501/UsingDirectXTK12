@@ -40,6 +40,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Adding audio to your projec
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Making use of wave banks", "Making use of wave banks\Making use of wave banks.vcxproj", "{E1AF88EF-6C13-4DDC-8DB1-F9327CDA3C25}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Using positional audio", "Using positional audio\Using positional audio.vcxproj", "{13388DD4-EF06-4944-823B-1414B4248C28}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|ARM64 = Debug|ARM64
@@ -254,6 +256,18 @@ Global
 		{E1AF88EF-6C13-4DDC-8DB1-F9327CDA3C25}.Release|x64.Build.0 = Release|x64
 		{E1AF88EF-6C13-4DDC-8DB1-F9327CDA3C25}.Release|x86.ActiveCfg = Release|Win32
 		{E1AF88EF-6C13-4DDC-8DB1-F9327CDA3C25}.Release|x86.Build.0 = Release|Win32
+		{13388DD4-EF06-4944-823B-1414B4248C28}.Debug|ARM64.ActiveCfg = Debug|x64
+		{13388DD4-EF06-4944-823B-1414B4248C28}.Debug|ARM64.Build.0 = Debug|x64
+		{13388DD4-EF06-4944-823B-1414B4248C28}.Debug|x64.ActiveCfg = Debug|x64
+		{13388DD4-EF06-4944-823B-1414B4248C28}.Debug|x64.Build.0 = Debug|x64
+		{13388DD4-EF06-4944-823B-1414B4248C28}.Debug|x86.ActiveCfg = Debug|Win32
+		{13388DD4-EF06-4944-823B-1414B4248C28}.Debug|x86.Build.0 = Debug|Win32
+		{13388DD4-EF06-4944-823B-1414B4248C28}.Release|ARM64.ActiveCfg = Release|x64
+		{13388DD4-EF06-4944-823B-1414B4248C28}.Release|ARM64.Build.0 = Release|x64
+		{13388DD4-EF06-4944-823B-1414B4248C28}.Release|x64.ActiveCfg = Release|x64
+		{13388DD4-EF06-4944-823B-1414B4248C28}.Release|x64.Build.0 = Release|x64
+		{13388DD4-EF06-4944-823B-1414B4248C28}.Release|x86.ActiveCfg = Release|Win32
+		{13388DD4-EF06-4944-823B-1414B4248C28}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -41,6 +41,7 @@ public:
     void OnWindowMoved();
     void OnDisplayChange();
     void OnWindowSizeChanged(int width, int height);
+    void OnNewAudioDevice() noexcept { m_retryAudio = true; }
 
     // Properties
     void GetDefaultSize( int& width, int& height ) const noexcept;
@@ -63,4 +64,15 @@ private:
 
     // If using the DirectX Tool Kit for DX12, uncomment this line:
     // std::unique_ptr<DirectX::GraphicsMemory> m_graphicsMemory;
+
+    std::unique_ptr<DirectX::AudioEngine> m_audEngine;
+    bool m_retryAudio;
+
+    std::unique_ptr<DirectX::WaveBank> m_sounds;
+    std::unique_ptr<std::mt19937> m_random;
+    std::unique_ptr<DirectX::SoundEffectInstance> m_nightLoop;
+    float explodeDelay;
+
+    std::unique_ptr<DirectX::WaveBank> m_music;
+    std::unique_ptr<DirectX::SoundStreamInstance> m_stream;
 };
