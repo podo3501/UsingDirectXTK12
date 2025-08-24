@@ -1,6 +1,6 @@
 # DirectXTK12 실습 프로젝트 요약
 
-이 저장소는 **DirectX Tool Kit for DirectX12 (DirectXTK12)**의 Getting Started 튜토리얼 예제를 직접 실행하고 검증한 학습 기반 프로젝트입니다.
+이 저장소는 **DirectX Tool Kit for DirectX12**(DirectXTK12)의 Getting Started 튜토리얼 예제를 직접 실행하고 검증한 학습 기반 프로젝트입니다.
 
 ---
 
